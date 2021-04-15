@@ -1,0 +1,12 @@
+{
+  "name": "BarTab",
+  "displayName": "BarTab",
+  "expo": {
+    "name": "BarTab",
+    "slug": "BarTab",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
