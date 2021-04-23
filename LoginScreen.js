@@ -1,25 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, StyleSheet, Text, TouchableOpacity, StatusBar } from 'react-native'
 import DrinkVideo from './Assets/DrinkMovie.mov'
 import Video from 'react-native-video'
 import LinearGradient from 'react-native-linear-gradient'
+import changeNavigationBarColor from 'react-native-navigation-bar-color'
+
 
 
 export default function LoginScreen({ navigation }) {
+    try {
+        const response = changeNavigationBarColor('transparent');
+        console.log(response)// {success: true}
+    } catch (e) {
+        console.log(e)// {success: false}
+    }
     return (
-        <View style={styles.container}>
+        <View style={styles.container} >
 
             <Video source={DrinkVideo} style={styles.backgroundVideo} resizeMode='cover' repeat={true} />
-            <Text style={[styles.titleText, { position: 'absolute', top: 60 }]}>Welcome To BarTab!</Text>
-            <TouchableOpacity>
+            <Text style={[styles.titleText, { position: 'absolute', top: 150 }]}>Welcome To BarTab!</Text>
+            <TouchableOpacity onPress={() => {
+                navigation.navigate('HomeScreen')
+            }
+            }>
                 <LinearGradient colors={['#8B008B', '#8B2354']} style={styles.RoundedButton}>
                     <Text style={styles.buttonText}>Log In</Text>
                 </LinearGradient>
 
+            </TouchableOpacity>
+            <TouchableOpacity>
                 <LinearGradient colors={['#8B008B', '#8B0054']} style={[styles.RoundedButton, { marginBottom: 40 }]}>
                     <Text style={styles.buttonText}>Sign Up</Text>
                 </LinearGradient>
-                <StatusBar barStyle='light-content' height='0' hidden />
             </TouchableOpacity>
         </View>
 
@@ -33,7 +45,7 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#000',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -42,7 +54,8 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        position: 'absolute'
+        position: 'absolute',
+        backgroundColor: '#000'
     },
     titleText: {
         color: '#ffffff',
@@ -58,7 +71,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         shadowRadius: 2,
         shadowOpacity: 0.8,
-        shadowColor: '#fff',
+        shadowColor: '#000',
         shadowOffset: { width: 1, height: 1 },
         elevation: 20
     },
