@@ -18,11 +18,14 @@ const HomeScreen = () => {
                 <Text style={styles.subHeaderText}>Welcome back, Cameron!</Text>
 
             </View>
-            <View style={{ marginTop: 40, position: 'absolute', top: 70, left: 0, right: 0 }}>
-                <View style={{ paddingLeft: 20, alignSelf: 'stretch' }}>
-                    <Text style={{ textAlign: 'left', color: 'white', fontWeight: 'bold', fontSize: 16 }}>Recently Ordered:</Text>
-                    <ScrollView horizontal>
-                        <DrinkContainer imageSource={require('./Assets/Drinks/Daiquiri.png')} />
+            <View style={{ marginTop: 60, position: 'absolute', top: 70, left: 0, right: 0 }}>
+                <View style={{ alignSelf: 'stretch' }}>
+                    <Text style={{ paddingLeft: 20, textAlign: 'left', color: 'white', fontWeight: 'bold', fontSize: 16 }}>Recently Ordered:</Text>
+                    <ScrollView showsHorizontalScrollIndicator={false} horizontal style={{ paddingTop: 20 }}>
+                        <DrinkContainer drinkName={'Strawberry Daiquiri'} imageSource={{ uri: 'https://oskars.ie/wp-content/uploads/frozen-strawberry-daiquiri.png' }} />
+                        <DrinkContainer drinkName={'Whiskey Rocks'} imageSource={{ uri: 'https://www.totalwine.com/dynamic/x490,sq/media/sys_master/twmmedia/hb1/h95/11941385535518.png' }} />
+                        <DrinkContainer drinkName={'Gin and Tonic'} imageSource={{ uri: 'https://d32miag6ta013h.cloudfront.net/master_cocktails/2922/fr-fr/small/st~germain_g_t.png' }} />
+                        <DrinkContainer drinkName={'Martini'} imageSource={{ uri: 'https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.upp-prod-us.s3.amazonaws.com%2Ff5e9fd58-1ce6-11e8-aaca-4574d7dabfb6?fit=scale-down&source=next&width=700' }} />
 
                     </ScrollView>
                 </View>
