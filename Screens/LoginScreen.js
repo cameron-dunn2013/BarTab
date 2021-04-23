@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, Text, TouchableOpacity, StatusBar } from 'react-native'
-import DrinkVideo from './Assets/DrinkMovie.mov'
+import DrinkVideo from '../Assets/DrinkMovie.mov'
 import Video from 'react-native-video'
 import LinearGradient from 'react-native-linear-gradient'
 import changeNavigationBarColor from 'react-native-navigation-bar-color'
@@ -14,25 +14,29 @@ export default function LoginScreen({ navigation }) {
     } catch (e) {
         console.log(e)// {success: false}
     }
+
     return (
         <View style={styles.container} >
-
             <Video source={DrinkVideo} style={styles.backgroundVideo} resizeMode='cover' repeat={true} />
             <Text style={[styles.titleText, { position: 'absolute', top: 150 }]}>Welcome To BarTab!</Text>
             <TouchableOpacity onPress={() => {
                 navigation.navigate('HomeScreen')
-            }
-            }>
+            }}>
+
                 <LinearGradient colors={['#8B008B', '#8B2354']} style={styles.RoundedButton}>
                     <Text style={styles.buttonText}>Log In</Text>
                 </LinearGradient>
 
             </TouchableOpacity>
             <TouchableOpacity>
+
                 <LinearGradient colors={['#8B008B', '#8B0054']} style={[styles.RoundedButton, { marginBottom: 40 }]}>
                     <Text style={styles.buttonText}>Sign Up</Text>
                 </LinearGradient>
+
             </TouchableOpacity>
+
+
         </View>
 
 

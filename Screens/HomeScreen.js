@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import changeNavigationBarColor from 'react-native-navigation-bar-color'
 import DrinkContainer from './DrinkContainer'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+
 const HomeScreen = () => {
     try {
         const response = changeNavigationBarColor('transparent');
@@ -28,10 +30,14 @@ const HomeScreen = () => {
                         <DrinkContainer drinkName={'Martini'} imageSource={{ uri: 'https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.upp-prod-us.s3.amazonaws.com%2Ff5e9fd58-1ce6-11e8-aaca-4574d7dabfb6?fit=scale-down&source=next&width=700' }} />
 
                     </ScrollView>
+
+
                 </View>
 
             </View>
-
+            <TouchableOpacity style={{ position: 'absolute', bottom: 20, alignContent: 'center', justifyContent: 'center', width: 75, height: 75, borderRadius: 50, backgroundColor: 'rgba(255,255,255, 1)' }}>
+                <Icon name={"menu"} size={40} style={{ textAlign: 'center', opacity: 1 }} />
+            </TouchableOpacity>
         </View >
     );
 }
