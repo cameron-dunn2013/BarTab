@@ -1,11 +1,38 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import React, { useState, useRef } from 'react'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import changeNavigationBarColor from 'react-native-navigation-bar-color'
 import DrinkContainer from './DrinkContainer'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-
 const HomeScreen = () => {
+    const [isMenuOpen, setMenuStatus] = useState(false);
+
+    const moveAmount = useRef(new Animated.Value(0)).current;
+
+
+    const xyValues = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+
+    const moveAnim = () => {
+        // Will change fadeAnim value to 0 in 3 seconds
+        Animated.spring(moveAmount, {
+            toValue: isMenuOpen ? 0 : -75,
+            duration: 200,
+            useNativeDriver: true
+        }).start();
+    };
+
+    const moveCornerAmount = useRef(new Animated.Value(0)).current;
+
+    const moveCornerAnim = () => {
+        // Will change fadeAnim value to 0 in 3 seconds
+        Animated.spring(xyValues, {
+            toValue: isMenuOpen ? { x: 0, y: 0 } : { x: -57, y: -50 },
+            duration: 200,
+            useNativeDriver: false
+        }).start();
+    };
+
+
     try {
         const response = changeNavigationBarColor('transparent');
         console.log(response)// {success: true}
@@ -35,9 +62,24 @@ const HomeScreen = () => {
                 </View>
 
             </View>
-            <TouchableOpacity style={{ position: 'absolute', bottom: 20, alignContent: 'center', justifyContent: 'center', width: 75, height: 75, borderRadius: 50, backgroundColor: 'rgba(255,255,255, 1)' }}>
-                <Icon name={"menu"} size={40} style={{ textAlign: 'center', opacity: 1 }} />
+            <TouchableOpacity style={{ zIndex: 2, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }} onPress={() => { moveCornerAnim(); moveAnim(); setMenuStatus(!isMenuOpen) }}>
+                <Icon name={isMenuOpen ? "close" : "menu"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
             </TouchableOpacity>
+            <Animated.View style={{ transform: [{ translateX: moveAmount }], zIndex: 1, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+                <TouchableOpacity style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }}>
+                    <Icon name={"favorite-border"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
+                </TouchableOpacity>
+            </Animated.View>
+            <Animated.View style={[{ transform: xyValues.getTranslateTransform(), position: 'absolute', bottom: 25, right: 20, zIndex: 1, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }]}>
+                <TouchableOpacity style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }}>
+                    <Icon name={"lock"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
+                </TouchableOpacity>
+            </Animated.View>
+            <Animated.View style={{ transform: [{ translateY: moveAmount }], zIndex: 1, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+                <TouchableOpacity style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }}>
+                    <Icon name={"shopping-cart"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
+                </TouchableOpacity>
+            </Animated.View>
         </View >
     );
 }
