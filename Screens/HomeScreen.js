@@ -4,6 +4,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import changeNavigationBarColor from 'react-native-navigation-bar-color'
 import DrinkContainer from './DrinkContainer'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import HighlightContainer from './HighlightContainer'
 const HomeScreen = () => {
     const [isMenuOpen, setMenuStatus] = useState(false);
 
@@ -51,23 +52,47 @@ const HomeScreen = () => {
             </View>
             {/* End of header */}
 
-            {/* Recently Ordered */}
-            <View style={{ marginTop: 60, position: 'absolute', top: 70, left: 0, right: 0 }}>
-                <View style={{ alignSelf: 'stretch' }}>
-                    <Text style={{ paddingLeft: 20, textAlign: 'left', color: 'white', fontWeight: 'bold', fontSize: 16 }}>Recently Ordered:</Text>
-                    <ScrollView showsHorizontalScrollIndicator={false} horizontal style={{ paddingTop: 20 }}>
-                        <DrinkContainer drinkName={'Strawberry Daiquiri'} imageSource={{ uri: 'https://oskars.ie/wp-content/uploads/frozen-strawberry-daiquiri.png' }} />
-                        <DrinkContainer drinkName={'Whiskey Rocks'} imageSource={{ uri: 'https://www.totalwine.com/dynamic/x490,sq/media/sys_master/twmmedia/hb1/h95/11941385535518.png' }} />
-                        <DrinkContainer drinkName={'Gin and Tonic'} imageSource={{ uri: 'https://d32miag6ta013h.cloudfront.net/master_cocktails/2922/fr-fr/small/st~germain_g_t.png' }} />
-                        <DrinkContainer drinkName={'Martini'} imageSource={{ uri: 'https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.upp-prod-us.s3.amazonaws.com%2Ff5e9fd58-1ce6-11e8-aaca-4574d7dabfb6?fit=scale-down&source=next&width=700' }} />
+            <ScrollView style={{ marginTop: 60, position: 'absolute', top: 70, left: 0, right: 0 }}>
 
-                    </ScrollView>
+
+                {/* Main Components */}
+                <View>
+                    {/* Recently Ordered */}
+                    <View style={{ alignSelf: 'stretch' }}>
+                        <Text style={styles.sectionHeaderText}>Recently Ordered:</Text>
+                        <ScrollView showsHorizontalScrollIndicator={false} horizontal style={{ paddingTop: 20 }}>
+                            <DrinkContainer drinkName={'Strawberry Daiquiri'} imageSource={{ uri: 'https://oskars.ie/wp-content/uploads/frozen-strawberry-daiquiri.png' }} />
+                            <DrinkContainer drinkName={'Whiskey Rocks'} imageSource={{ uri: 'https://www.totalwine.com/dynamic/x490,sq/media/sys_master/twmmedia/hb1/h95/11941385535518.png' }} />
+                            <DrinkContainer drinkName={'Gin and Tonic'} imageSource={{ uri: 'https://d32miag6ta013h.cloudfront.net/master_cocktails/2922/fr-fr/small/st~germain_g_t.png' }} />
+                            <DrinkContainer drinkName={'Martini'} imageSource={{ uri: 'https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.upp-prod-us.s3.amazonaws.com%2Ff5e9fd58-1ce6-11e8-aaca-4574d7dabfb6?fit=scale-down&source=next&width=700' }} />
+
+                        </ScrollView>
+
+
+                    </View>
+                    {/* End Recently Ordered */}
+
+
+                    {/*Popular Today*/}
+                    <View style={{ alignSelf: 'stretch', marginTop: 20 }}>
+                        <Text style={[styles.sectionHeaderText, { paddingBottom: 20 }]}>Popular Today:</Text>
+                        <ScrollView showsHorizontalScrollIndicator={false} horizontal style={{ paddingTop: 20 }}>
+                            <HighlightContainer drinkName={'Blue Mother Fucker'} imageSource={{ uri: 'https://i.pinimg.com/originals/6f/98/70/6f98704adbbc06ba80e0278d0c7a36bc.png' }} />
+                            <HighlightContainer drinkName={'Sex On The Beach'} imageSource={{ uri: 'http://arrieta32.com/wp-content/uploads/2020/09/COCKTAILS-06.png' }} />
+                        </ScrollView>
+                    </View>
+                    {/* End Popular Today */}
 
 
                 </View>
+                {/* End Main Components */}
 
-            </View>
-            {/* End Recently Ordered */}
+
+            </ScrollView>
+
+
+
+
 
 
             {/* Menu Button */}
@@ -105,6 +130,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
 
+    },
+    sectionHeaderText:
+    {
+        paddingLeft: 20,
+        textAlign: 'left',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 16
     },
     backgroundGradient: {
         bottom: 0,
