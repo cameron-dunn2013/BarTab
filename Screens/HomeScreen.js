@@ -42,11 +42,16 @@ const HomeScreen = () => {
     return (
         <View style={styles.container}>
             <LinearGradient style={styles.backgroundGradient} colors={['#ff1b6b', '#45caff']} />
+
+            {/* Header */}
             <View style={styles.headerContainer}>
                 <Text style={styles.headerText}>BarTab</Text>
                 <Text style={styles.subHeaderText}>Welcome back, Cameron!</Text>
 
             </View>
+            {/* End of header */}
+
+            {/* Recently Ordered */}
             <View style={{ marginTop: 60, position: 'absolute', top: 70, left: 0, right: 0 }}>
                 <View style={{ alignSelf: 'stretch' }}>
                     <Text style={{ paddingLeft: 20, textAlign: 'left', color: 'white', fontWeight: 'bold', fontSize: 16 }}>Recently Ordered:</Text>
@@ -62,6 +67,10 @@ const HomeScreen = () => {
                 </View>
 
             </View>
+            {/* End Recently Ordered */}
+
+
+            {/* Menu Button */}
             <TouchableOpacity style={{ zIndex: 2, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }} onPress={() => { moveCornerAnim(); moveAnim(); setMenuStatus(!isMenuOpen) }}>
                 <Icon name={isMenuOpen ? "close" : "menu"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
             </TouchableOpacity>
@@ -80,6 +89,9 @@ const HomeScreen = () => {
                     <Icon name={"shopping-cart"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
                 </TouchableOpacity>
             </Animated.View>
+            {/* End of Menu Button */}
+
+
         </View >
     );
 }
