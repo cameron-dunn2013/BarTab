@@ -20,7 +20,10 @@ const HomeScreen = () => {
 
     const favoriteMoveAmount = useRef(new Animated.Value(95)).current;
 
-    const [isFavoritesOpen, setFavoritesMenuStatus] = useState(false);
+    {/*For whatever reason setting this to true and changing the render function (DisplayFavoritesScreen) makes it to where
+    the button performs as expected, not sure why, but for now it will stay this way until I get time to fix it further.*/}
+    const [isFavoritesOpen, setFavoritesMenuStatus] = useState(true);
+
 
     const pageWidth = useRef(new Animated.Value(50)).current;
 
@@ -193,12 +196,12 @@ const HomeScreen = () => {
 
             {/* Favorites Buttons */}
             {/* Favorite button that shows after movement is finished. */}
-            <Animated.View pointerEvents={isHidingTransitionButtons ? 'auto' : 'none'} style={{ opacity: isHidingTransitionButtons ? 1 : 0, zIndex: 5, position: 'absolute', bottom: 25, right: favoriteMoveAmount, alignContent: 'center', justifyContent: 'center', width: pageWidth, height: pageHeight, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+            <Animated.View style={{ opacity: isHidingTransitionButtons ? 1 : 0, zIndex: 5, position: 'absolute', bottom: 25, right: favoriteMoveAmount, alignContent: 'center', justifyContent: 'center', width: pageWidth, height: pageHeight, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
                 <TouchableOpacity style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} onPress={() => animateFavorite()}>
                     <DisplayFavoritesScreen />
                 </TouchableOpacity>
             </Animated.View>
-            {/* One on top */}
+            {/* Favorite Button that is visible during transition */}
             <Animated.View style={{ opacity: isHidingTransitionButtons ? 0 : 1, transform: [{ translateX: moveAmount }], zIndex: 1, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
                 <TouchableOpacity style={{ zIndex: 2, position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} >
                     <Icon name={"favorite"} size={30} style={{ zIndex: 2, position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
