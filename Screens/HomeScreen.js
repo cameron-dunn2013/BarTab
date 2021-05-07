@@ -7,14 +7,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import HighlightContainer from '../Components/HighlightContainer'
 import FavoritesScreen from './FavoritesScreen'
 import { BlurView } from "@react-native-community/blur";
+import { color } from 'react-native-reanimated'
 
 const HomeScreen = () => {
     const [isMenuOpen, setMenuStatus] = useState(false);
 
-    const moveAmount = useRef(new Animated.Value(0)).current;
+    const buttonsMoveAmount = useRef(new Animated.Value(0)).current;
 
 
-    const xyValues = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+    const buttonsDiagonalMoveAmount = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
 
     const [isHidingTransitionButtons, setTransitionButtonStatus] = useState(false);
 
@@ -22,16 +23,19 @@ const HomeScreen = () => {
 
     {/*For whatever reason setting this to true and changing the render function (DisplayFavoritesScreen) makes it to where
     the button performs as expected, not sure why, but for now it will stay this way until I get time to fix it further.*/}
-    const [isFavoritesOpen, setFavoritesMenuStatus] = useState(true);
-
+    const [isFavoritesClosed, setFavoritesMenuStatus] = useState(true);
 
     const pageWidth = useRef(new Animated.Value(50)).current;
 
     const pageHeight = useRef(new Animated.Value(35)).current;
 
+    const [isShowingCloseButton, setCloseButtonAppearance] = useState(false);
+
+    const closeButtonMoveAmount = useRef(new Animated.Value(-40)).current;
+
     const moveAnim = () => {
         // Will change fadeAnim value to 0 in 3 seconds
-        Animated.spring(moveAmount, {
+        Animated.spring(buttonsMoveAmount, {
             toValue: isMenuOpen ? 0 : -75,
             duration: 100,
             useNativeDriver: false
@@ -39,9 +43,9 @@ const HomeScreen = () => {
     };
 
     function DisplayFavoritesScreen() {
-        if (!isFavoritesOpen) {
+        if (!isFavoritesClosed) {
             return (
-                <FavoritesScreen />
+                <FavoritesScreen closeMenuFunction={animateFavorite} />
             )
         } else {
             return (
@@ -55,7 +59,7 @@ const HomeScreen = () => {
 
     const moveCornerAnim = () => {
         // Will change fadeAnim value to 0 in 3 seconds
-        Animated.spring(xyValues, {
+        Animated.spring(buttonsDiagonalMoveAmount, {
             toValue: isMenuOpen ? { x: 0, y: 0 } : { x: -57, y: -50 },
             duration: 200,
             useNativeDriver: false
@@ -64,14 +68,14 @@ const HomeScreen = () => {
 
     const moveFavoriteToMiddle = () => {
         Animated.spring(favoriteMoveAmount, {
-            toValue: isFavoritesOpen ? 20 : 95,
+            toValue: isFavoritesClosed ? 20 : 95,
             duration: 200,
             useNativeDriver: false
         }).start();
     };
 
     const animateFavorite = () => {
-        setFavoritesMenuStatus(!isFavoritesOpen);
+        setFavoritesMenuStatus(!isFavoritesClosed)
         moveFavoriteToMiddle();
         transitionToScreen();
     };
@@ -90,7 +94,7 @@ const HomeScreen = () => {
 
     const updateWidth = () => {
         Animated.spring(pageWidth, {
-            toValue: isFavoritesOpen ? 325 : 50,
+            toValue: isFavoritesClosed ? 325 : 50,
             duration: 200,
             useNativeDriver: false
         }).start();
@@ -98,7 +102,7 @@ const HomeScreen = () => {
 
     const updateHeight = () => {
         Animated.spring(pageHeight, {
-            toValue: isFavoritesOpen ? 700 : 35,
+            toValue: isFavoritesClosed ? 700 : 35,
             duration: 200,
             useNativeDriver: false
         }).start();
@@ -115,6 +119,7 @@ const HomeScreen = () => {
     } catch (e) {
         console.log(e)// {success: false}
     }
+
 
     return (
 
@@ -189,6 +194,7 @@ const HomeScreen = () => {
 
             {/* Buttons */}
 
+
             {/* Menu Button */}
             <TouchableOpacity style={{ zIndex: 3, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }} onPress={() => animateButtons()}>
                 <Icon name={isMenuOpen ? "close" : "menu"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
@@ -196,13 +202,13 @@ const HomeScreen = () => {
 
             {/* Favorites Buttons */}
             {/* Favorite button that shows after movement is finished. */}
-            <Animated.View style={{ opacity: isHidingTransitionButtons ? 1 : 0, zIndex: 5, position: 'absolute', bottom: 25, right: favoriteMoveAmount, alignContent: 'center', justifyContent: 'center', width: pageWidth, height: pageHeight, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
-                <TouchableOpacity style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} onPress={() => animateFavorite()}>
+            <Animated.View style={{ opacity: isHidingTransitionButtons ? 1 : 0, zIndex: 5, position: 'absolute', bottom: 25, right: favoriteMoveAmount, alignContent: 'center', justifyContent: 'center', width: pageWidth, height: pageHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+                <TouchableOpacity disabled={!isFavoritesClosed} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} onPress={() => animateFavorite()}>
                     <DisplayFavoritesScreen />
                 </TouchableOpacity>
             </Animated.View>
             {/* Favorite Button that is visible during transition */}
-            <Animated.View style={{ opacity: isHidingTransitionButtons ? 0 : 1, transform: [{ translateX: moveAmount }], zIndex: 1, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+            <Animated.View style={{ opacity: isHidingTransitionButtons ? 0 : 1, transform: [{ translateX: buttonsMoveAmount }], zIndex: 1, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
                 <TouchableOpacity style={{ zIndex: 2, position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} >
                     <Icon name={"favorite"} size={30} style={{ zIndex: 2, position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
                 </TouchableOpacity>
@@ -211,18 +217,20 @@ const HomeScreen = () => {
 
 
             {/* Settings Button */}
-            <Animated.View style={[{ transform: xyValues.getTranslateTransform(), position: 'absolute', bottom: 25, right: 20, zIndex: 2, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }]}>
+            <Animated.View style={[{ transform: buttonsDiagonalMoveAmount.getTranslateTransform(), position: 'absolute', bottom: 25, right: 20, zIndex: 2, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }]}>
                 <TouchableOpacity style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }}>
                     <Icon name={"settings"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
                 </TouchableOpacity>
             </Animated.View>
             {/* Cart Button */}
-            <Animated.View style={{ transform: [{ translateY: moveAmount }], zIndex: 2, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+            <Animated.View style={{ transform: [{ translateY: buttonsMoveAmount }], zIndex: 2, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
                 <TouchableOpacity style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }}>
                     <Icon name={"shopping-cart"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
                 </TouchableOpacity>
             </Animated.View>
             {/* End of Menu Button */}
+
+
 
 
             {/* <FavoritesScreen style={{ zIndex: 10 }} /> */}
