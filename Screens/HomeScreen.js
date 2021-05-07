@@ -25,13 +25,15 @@ const HomeScreen = () => {
     the button performs as expected, not sure why, but for now it will stay this way until I get time to fix it further.*/}
     const [isFavoritesClosed, setFavoritesMenuStatus] = useState(true);
 
-    const pageWidth = useRef(new Animated.Value(50)).current;
+    const favoriteWidth = useRef(new Animated.Value(50)).current;
 
-    const pageHeight = useRef(new Animated.Value(35)).current;
+    const favoriteHeight = useRef(new Animated.Value(35)).current;
 
     const [isShowingCloseButton, setCloseButtonAppearance] = useState(false);
 
     const closeButtonMoveAmount = useRef(new Animated.Value(-40)).current;
+
+    const window = Dimensions.get('window');
 
     const moveAnim = () => {
         // Will change fadeAnim value to 0 in 3 seconds
@@ -51,6 +53,16 @@ const HomeScreen = () => {
             return (
                 <Icon name={"favorite"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
             )
+        }
+    }
+
+    function DisplayBlur() {
+        if (!isFavoritesClosed) {
+            return (
+                <BlurView blurAmount={10} blurRadius={5} style={{ zIndex: 4, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} />
+            )
+        } else {
+            return null
         }
     }
 
@@ -77,7 +89,7 @@ const HomeScreen = () => {
     const animateFavorite = () => {
         setFavoritesMenuStatus(!isFavoritesClosed)
         moveFavoriteToMiddle();
-        transitionToScreen();
+        transitionToScreen(isFavoritesClosed, favoriteHeight, favoriteWidth);
     };
 
     const animateButtons = () => {
@@ -92,25 +104,27 @@ const HomeScreen = () => {
 
     };
 
-    const updateWidth = () => {
-        Animated.spring(pageWidth, {
-            toValue: isFavoritesClosed ? 325 : 50,
+
+    //Recycled functions for turning menu buttons into screens.
+    const updateWidth = (determiningBoolean, widthVariable) => {
+        Animated.spring(widthVariable, {
+            toValue: determiningBoolean ? (window.width * 0.9) : 50,
             duration: 200,
             useNativeDriver: false
         }).start();
     };
 
-    const updateHeight = () => {
-        Animated.spring(pageHeight, {
-            toValue: isFavoritesClosed ? 700 : 35,
+    const updateHeight = (determiningBoolean, heightVariable) => {
+        Animated.spring(heightVariable, {
+            toValue: determiningBoolean ? (window.height * 0.95) : 35,
             duration: 200,
             useNativeDriver: false
         }).start();
     };
 
-    const transitionToScreen = () => {
-        updateWidth();
-        updateHeight();
+    const transitionToScreen = (determiningBoolean, heightVariable, widthVariable) => {
+        updateWidth(determiningBoolean, widthVariable);
+        updateHeight(determiningBoolean, heightVariable);
     };
 
     try {
@@ -202,7 +216,8 @@ const HomeScreen = () => {
 
             {/* Favorites Buttons */}
             {/* Favorite button that shows after movement is finished. */}
-            <Animated.View style={{ opacity: isHidingTransitionButtons ? 1 : 0, zIndex: 5, position: 'absolute', bottom: 25, right: favoriteMoveAmount, alignContent: 'center', justifyContent: 'center', width: pageWidth, height: pageHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+            <DisplayBlur />
+            <Animated.View style={{ opacity: isHidingTransitionButtons ? 1 : 0, zIndex: 5, position: 'absolute', bottom: 25, right: favoriteMoveAmount, alignContent: 'center', justifyContent: 'center', width: favoriteWidth, height: favoriteHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
                 <TouchableOpacity disabled={!isFavoritesClosed} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} onPress={() => animateFavorite()}>
                     <DisplayFavoritesScreen />
                 </TouchableOpacity>
