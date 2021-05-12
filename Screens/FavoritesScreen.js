@@ -43,8 +43,9 @@ const FavoritesScreen = (props) => {
                 <View style={{ paddingBottom: 20 }} />
             </ScrollView>
             <LinearGradient style={{ zIndex: 5, left: 0, right: 0, bottom: -0, position: 'absolute', height: 20 }} colors={['rgba(0, 0, 0, 0)', 'rgba(255, 255, 255, 0.9)']} />
+
             {/* Close Button */}
-            <View style={{ justifyContent: 'center', alignContent: 'center', position: 'absolute', left: 20, top: 20, zIndex: 10, backgroundColor: '#ff2a00', height: 30, width: 35, borderRadius: 25 }}>
+            <View style={{ justifyContent: 'center', alignContent: 'center', position: 'absolute', left: 20, top: 20, zIndex: 10, backgroundColor: '#ff1b6b', height: 30, width: 35, borderRadius: 25 }}>
                 <TouchableOpacity onPress={() => props.closeMenuFunction()} style={{ justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
                     <Icon name="close" size={15} style={{ textAlign: 'center', alignSelf: 'center', color: 'white' }} />
                 </TouchableOpacity>
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
         right: 0,
         position: 'absolute',
         backgroundColor: 'rgba(255,255,255,1)',
-        zIndex: 10,
+        zIndex: 100,
         borderRadius: 20,
         alignItems: 'center',
         overflow: 'hidden'

@@ -8,26 +8,32 @@ import HighlightContainer from '../Components/HighlightContainer'
 import FavoritesScreen from './FavoritesScreen'
 import { BlurView } from "@react-native-community/blur";
 import { color } from 'react-native-reanimated'
+import CartScreen from './CartScreen'
 
 const HomeScreen = () => {
     const [isMenuOpen, setMenuStatus] = useState(false);
 
     const buttonsMoveAmount = useRef(new Animated.Value(0)).current;
 
-
     const buttonsDiagonalMoveAmount = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
 
     const [isHidingTransitionButtons, setTransitionButtonStatus] = useState(false);
 
-    const favoriteMoveAmount = useRef(new Animated.Value(95)).current;
+    const linearMoveAmount = useRef(new Animated.Value(95)).current;
 
     {/*For whatever reason setting this to true and changing the render function (DisplayFavoritesScreen) makes it to where
     the button performs as expected, not sure why, but for now it will stay this way until I get time to fix it further.*/}
     const [isFavoritesClosed, setFavoritesMenuStatus] = useState(true);
 
+    const [isCartClosed, setCartMenuStatus] = useState(true);
+
     const favoriteWidth = useRef(new Animated.Value(50)).current;
 
     const favoriteHeight = useRef(new Animated.Value(35)).current;
+
+    const cartWidth = useRef(new Animated.Value(50)).current;
+
+    const cartHeight = useRef(new Animated.Value(35)).current;
 
     const [isShowingCloseButton, setCloseButtonAppearance] = useState(false);
 
@@ -47,19 +53,35 @@ const HomeScreen = () => {
     function DisplayFavoritesScreen() {
         if (!isFavoritesClosed) {
             return (
-                <FavoritesScreen closeMenuFunction={animateFavorite} />
+                <FavoritesScreen style={{ zIndex: 10 }} closeMenuFunction={animateFavorite} />
+                // <CartScreen style={{ zIndex: 10 }} />
+
             )
         } else {
             return (
-                <Icon name={"favorite"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
+                <Icon name={"favorite"} size={30} style={{ textAlign: 'center', opacity: 1 }} />
+            )
+        }
+    }
+
+    function DisplayCartScreen() {
+        if (!isCartClosed) {
+            return (
+                // <FavoritesScreen closeMenuFunction={animateFavorite} />
+                <CartScreen style={{ zIndex: 10 }} closeMenuFunction={animateCart} />
+
+            )
+        } else {
+            return (
+                <Icon name={"shopping-cart"} size={30} style={{ textAlign: 'center', opacity: 1 }} />
             )
         }
     }
 
     function DisplayBlur() {
-        if (!isFavoritesClosed) {
+        if (!isFavoritesClosed || !isCartClosed) {
             return (
-                <BlurView blurAmount={10} blurRadius={5} style={{ zIndex: 4, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} />
+                <BlurView blurAmount={10} blurRadius={5} style={{ zIndex: 5, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} />
             )
         } else {
             return null
@@ -78,9 +100,9 @@ const HomeScreen = () => {
         }).start();
     };
 
-    const moveFavoriteToMiddle = () => {
-        Animated.spring(favoriteMoveAmount, {
-            toValue: isFavoritesClosed ? 20 : 95,
+    const animateLinearAmounts = (determiningBoolean) => {
+        Animated.spring(linearMoveAmount, {
+            toValue: determiningBoolean ? 20 : 95,
             duration: 200,
             useNativeDriver: false
         }).start();
@@ -88,8 +110,14 @@ const HomeScreen = () => {
 
     const animateFavorite = () => {
         setFavoritesMenuStatus(!isFavoritesClosed)
-        moveFavoriteToMiddle();
+        animateLinearAmounts(isFavoritesClosed);
         transitionToScreen(isFavoritesClosed, favoriteHeight, favoriteWidth);
+    };
+
+    const animateCart = () => {
+        setCartMenuStatus(!isCartClosed)
+        animateLinearAmounts(isCartClosed);
+        transitionToScreen(isCartClosed, cartHeight, cartWidth);
     };
 
     const animateButtons = () => {
@@ -211,13 +239,13 @@ const HomeScreen = () => {
 
             {/* Menu Button */}
             <TouchableOpacity style={{ zIndex: 3, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }} onPress={() => animateButtons()}>
-                <Icon name={isMenuOpen ? "close" : "menu"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
+                <Icon name={isMenuOpen ? "close" : "menu"} size={30} style={{ textAlign: 'center', opacity: 1 }} />
             </TouchableOpacity>
 
             {/* Favorites Buttons */}
             {/* Favorite button that shows after movement is finished. */}
             <DisplayBlur />
-            <Animated.View style={{ opacity: isHidingTransitionButtons ? 1 : 0, zIndex: 5, position: 'absolute', bottom: 25, right: favoriteMoveAmount, alignContent: 'center', justifyContent: 'center', width: favoriteWidth, height: favoriteHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+            <Animated.View style={{ opacity: isHidingTransitionButtons ? (isCartClosed ? 1 : 0) : 0, zIndex: 6, position: 'absolute', bottom: 25, right: linearMoveAmount, alignContent: 'center', justifyContent: 'center', width: favoriteWidth, height: favoriteHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
                 <TouchableOpacity disabled={!isFavoritesClosed} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} onPress={() => animateFavorite()}>
                     <DisplayFavoritesScreen />
                 </TouchableOpacity>
@@ -237,18 +265,29 @@ const HomeScreen = () => {
                     <Icon name={"settings"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
                 </TouchableOpacity>
             </Animated.View>
+
+
             {/* Cart Button */}
-            <Animated.View style={{ transform: [{ translateY: buttonsMoveAmount }], zIndex: 2, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
-                <TouchableOpacity style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }}>
-                    <Icon name={"shopping-cart"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
+            {/* Cart Button that shows after movement is finished. */}
+            <Animated.View style={{ opacity: isHidingTransitionButtons ? (isFavoritesClosed ? 1 : 0) : 0, zIndex: 6, position: 'absolute', bottom: linearMoveAmount, right: 20, alignContent: 'center', justifyContent: 'center', width: cartWidth, height: cartHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+                <TouchableOpacity disabled={!isCartClosed} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} onPress={() => animateCart()}>
+                    <DisplayCartScreen />
                 </TouchableOpacity>
             </Animated.View>
+
+            {/* Cart button that is visible during transition */}
+            <Animated.View style={{ opacity: isHidingTransitionButtons ? 0 : 1, transform: [{ translateY: buttonsMoveAmount }], zIndex: 1, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+                <TouchableOpacity style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }}>
+                    <DisplayCartScreen />
+                </TouchableOpacity>
+            </Animated.View>
+
             {/* End of Menu Button */}
 
 
 
 
-            {/* <FavoritesScreen style={{ zIndex: 10 }} /> */}
+            {/* <CartScreen style={{ zIndex: 10 }} /> */}
 
         </View >
     );

@@ -16,7 +16,7 @@ const StandardContainer = (props) => {
                 </LinearGradient>)
         } else {
             return (
-                <LinearGradient colors={['rgba(255,27,107,0.2)', 'rgba(69, 202, 255, 0.5)']} style={{
+                <LinearGradient colors={['rgba(255,27,107,0.5)', 'rgba(69, 202, 255, 0.5)']} style={{
                     borderRadius: 15,
                     alignItems: 'center',
                     paddingHorizontal: 2
