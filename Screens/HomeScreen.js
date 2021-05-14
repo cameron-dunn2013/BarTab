@@ -9,6 +9,9 @@ import FavoritesScreen from './FavoritesScreen'
 import { BlurView } from "@react-native-community/blur";
 import { color } from 'react-native-reanimated'
 import CartScreen from './CartScreen'
+import ChangePaymentMethodScreen from './ChangePaymentMethodScreen'
+import { NavigationContainer, StackActions } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 
 const HomeScreen = () => {
     const [isMenuOpen, setMenuStatus] = useState(false);
@@ -64,11 +67,16 @@ const HomeScreen = () => {
         }
     }
 
+    const Stack = createStackNavigator();
+
     function DisplayCartScreen() {
         if (!isCartClosed) {
             return (
-                // <FavoritesScreen closeMenuFunction={animateFavorite} />
+
+
                 <CartScreen style={{ zIndex: 10 }} closeMenuFunction={animateCart} />
+                //ChangePaymentMethodScreen closeMenuFunction={animateCart} />
+
 
             )
         } else {
@@ -144,7 +152,7 @@ const HomeScreen = () => {
 
     const updateHeight = (determiningBoolean, heightVariable) => {
         Animated.spring(heightVariable, {
-            toValue: determiningBoolean ? (window.height * 0.95) : 35,
+            toValue: determiningBoolean ? (window.height * 0.98) : 35,
             duration: 200,
             useNativeDriver: false
         }).start();
@@ -288,6 +296,8 @@ const HomeScreen = () => {
 
 
             {/* <CartScreen style={{ zIndex: 10 }} /> */}
+
+            {/* <ChangePaymentMethodScreen /> */}
 
         </View >
     );

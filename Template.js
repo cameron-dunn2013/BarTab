@@ -10,7 +10,7 @@ const Template = () => {
 }
 
 const styles = StyleSheet.create({
-    constainer: {
+    container: {
         top: 0,
         bottom: 0,
         right: 0,
