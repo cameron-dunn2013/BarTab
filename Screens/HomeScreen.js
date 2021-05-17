@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Dimensions, BackHandler } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import changeNavigationBarColor from 'react-native-navigation-bar-color'
 import StandardContainer from '../Components/StandardContainer'
@@ -10,7 +10,7 @@ import { BlurView } from "@react-native-community/blur";
 import { color } from 'react-native-reanimated'
 import CartScreen from './CartScreen'
 import ChangePaymentMethodScreen from './ChangePaymentMethodScreen'
-import { NavigationContainer, StackActions } from '@react-navigation/native'
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 const HomeScreen = () => {
@@ -67,17 +67,30 @@ const HomeScreen = () => {
         }
     }
 
+
+
     const Stack = createStackNavigator();
+
+
+    const navigationTheme = {
+        ...DefaultTheme,
+        colors: {
+            backgroundColor: 'rgba(0,0,0,0)'
+        },
+    };
 
     function DisplayCartScreen() {
         if (!isCartClosed) {
             return (
 
-
-                <CartScreen style={{ zIndex: 10 }} closeMenuFunction={animateCart} />
-                //ChangePaymentMethodScreen closeMenuFunction={animateCart} />
-
-
+                <NavigationContainer theme={navigationTheme} independent style={{ backgroundColor: 'red' }}>
+                    <Stack.Navigator initialRouteName='CartScreen' screenOptions={{ headerShown: false }}>
+                        <Stack.Screen name='CartScreen'>
+                            {(props) => <CartScreen closeMenuFunction={animateCart} {...props} />}
+                        </Stack.Screen>
+                        <Stack.Screen name='ChangePaymentMethodScreen' component={ChangePaymentMethodScreen} />
+                    </Stack.Navigator>
+                </NavigationContainer>
             )
         } else {
             return (

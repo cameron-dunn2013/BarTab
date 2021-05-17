@@ -6,7 +6,7 @@ import PaymentIcon from 'react-native-ico-payment-method';
 
 
 
-const ChangePaymentMethodScreen = (props) => {
+const ChangePaymentMethodScreen = ({ navigation }) => {
 
     const screenHeight = Dimensions.get('window').height;
     const screenWidth = Dimensions.get('window').width;
@@ -14,7 +14,7 @@ const ChangePaymentMethodScreen = (props) => {
         <View style={styles.container}>
             {/* Close Button */}
             <View style={{ elevation: 10, justifyContent: 'center', alignContent: 'center', position: 'absolute', left: 20, top: 20, zIndex: 10, backgroundColor: '#ff1b6b', height: 30, width: 35, borderRadius: 25 }}>
-                <TouchableOpacity onPress={() => props.closeMenuFunction()} style={{ elevation: 5, justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+                <TouchableOpacity onPress={(props) => navigation.pop()} style={{ elevation: 5, justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
                     <Icon name="arrow-back" size={15} style={{ textAlign: 'center', alignSelf: 'center', color: 'white' }} />
                 </TouchableOpacity>
             </View>

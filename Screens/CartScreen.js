@@ -4,12 +4,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import CartListingContainer from '../Components/CartListingContainer'
 import LinearGradient from 'react-native-linear-gradient'
 
-const CartScreen = (props) => {
+const CartScreen = ({ navigation, closeMenuFunction }) => {
     return (
         <View style={styles.container}>
             {/* Close Button */}
             <View style={{ elevation: 10, justifyContent: 'center', alignContent: 'center', position: 'absolute', left: 20, top: 20, zIndex: 10, backgroundColor: '#ff1b6b', height: 30, width: 35, borderRadius: 25 }}>
-                <TouchableOpacity onPress={() => props.closeMenuFunction()} style={{ justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+                <TouchableOpacity onPress={() => closeMenuFunction()} style={{ justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
                     <Icon name="close" size={15} style={{ textAlign: 'center', alignSelf: 'center', color: 'white' }} />
                 </TouchableOpacity>
             </View>
@@ -69,7 +69,7 @@ const CartScreen = (props) => {
                                     <Text>{'MARK ZUCKERBERG\nVisa •6789'}</Text>
 
                                 </View>
-                                <TouchableOpacity style={{ position: 'absolute', right: 8, marginTop: 15, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 30, shadowRadius: 4, shadowOpacity: 1, elevation: 8, backgroundColor: 'white', alignContent: 'center', justifyContent: 'center' }}>
+                                <TouchableOpacity style={{ position: 'absolute', right: 8, marginTop: 15, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 30, shadowRadius: 4, shadowOpacity: 1, elevation: 8, backgroundColor: 'white', alignContent: 'center', justifyContent: 'center' }} onPress={(props) => { navigation.navigate('ChangePaymentMethodScreen') }}>
                                     <View>
                                         <Icon name='arrow-forward-ios' size={20} />
                                     </View>
