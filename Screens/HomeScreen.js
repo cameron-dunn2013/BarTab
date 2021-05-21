@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react'
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Dimensions, BackHandler } from 'react-native'
+import React, { useState, useRef, useEffect } from 'react'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Dimensions, BackHandler, Image } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import changeNavigationBarColor from 'react-native-navigation-bar-color'
 import StandardContainer from '../Components/StandardContainer'
@@ -7,13 +7,20 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import HighlightContainer from '../Components/HighlightContainer'
 import FavoritesScreen from './FavoritesScreen'
 import { BlurView } from "@react-native-community/blur";
-import { color } from 'react-native-reanimated'
 import CartScreen from './CartScreen'
 import ChangePaymentMethodScreen from './ChangePaymentMethodScreen'
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
+import { NavigationContainer, DefaultTheme, useNavigation } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
+import ChangeLocationScreen from './ChangeLocationScreen.js'
+import BackgroundDark from '../Assets/Background_dark.jpg'
+import BurgerImage from '../Assets/Icons/Burger.png'
+import DrinksImage from '../Assets/Icons/Drinks.png'
+import GoogleMapsImage from '../Assets/Icons/GoogleMapsIcon.png'
 
 const HomeScreen = () => {
+
+
+
     const [isMenuOpen, setMenuStatus] = useState(false);
 
     const buttonsMoveAmount = useRef(new Animated.Value(0)).current;
@@ -24,11 +31,9 @@ const HomeScreen = () => {
 
     const linearMoveAmount = useRef(new Animated.Value(95)).current;
 
-    {/*For whatever reason setting this to true and changing the render function (DisplayFavoritesScreen) makes it to where
-    the button performs as expected, not sure why, but for now it will stay this way until I get time to fix it further.*/}
-    const [isFavoritesClosed, setFavoritesMenuStatus] = useState(true);
+    const [isFavoritesOpen, setFavoritesMenuStatus] = useState(false);
 
-    const [isCartClosed, setCartMenuStatus] = useState(true);
+    const [isCartOpen, setCartMenuStatus] = useState(false);
 
     const favoriteWidth = useRef(new Animated.Value(50)).current;
 
@@ -37,10 +42,6 @@ const HomeScreen = () => {
     const cartWidth = useRef(new Animated.Value(50)).current;
 
     const cartHeight = useRef(new Animated.Value(35)).current;
-
-    const [isShowingCloseButton, setCloseButtonAppearance] = useState(false);
-
-    const closeButtonMoveAmount = useRef(new Animated.Value(-40)).current;
 
     const window = Dimensions.get('window');
 
@@ -53,11 +54,57 @@ const HomeScreen = () => {
         }).start();
     };
 
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+        };
+    }, [isFavoritesOpen, isCartOpen, isMenuOpen, isHidingTransitionButtons]);
+
+    function handleBackButtonClick() {
+
+        // if (isFavoritesOpen) {
+        //     console.log('hit isFavoritesOpen Section')
+        //     console.log('isCartOpen' + isCartOpen)
+        //     console.log('isFavoritesOpen' + isFavoritesOpen)
+        //     animateFavorite()
+        //     return true;
+        // }
+        // else if (isCartOpen) {
+        //     console.log('hit isCartOpen Section')
+        //     console.log('isCartOpen' + isCartOpen)
+        //     console.log('isFavoritesOpen' + isFavoritesOpen)
+        //     animateCart()
+        //     return true;
+        // }
+        // else {
+        //     console.log('hit other Section')
+        //     console.log('isCartOpen' + isCartOpen)
+        //     console.log('isFavoritesOpen' + isFavoritesOpen)
+        //     if (isMenuOpen) {
+        //         animateButtons()
+        //     }
+        //     return true;
+        // }
+        return true;
+    }
+
+    useEffect(() => {
+        animateLinearAmounts(isCartOpen);
+        transitionToScreen(isCartOpen, cartHeight, cartWidth);
+    }, [isCartOpen])
+
+    useEffect(() => {
+        animateLinearAmounts(isFavoritesOpen);
+        transitionToScreen(isFavoritesOpen, favoriteHeight, favoriteWidth);
+    }, [isFavoritesOpen])
+
     function DisplayFavoritesScreen() {
-        if (!isFavoritesClosed) {
+        if (isFavoritesOpen) {
             return (
-                <FavoritesScreen style={{ zIndex: 10 }} closeMenuFunction={animateFavorite} />
-                // <CartScreen style={{ zIndex: 10 }} />
+                // <FavoritesScreen style={{ zIndex: 10 }} closeMenuFunction={animateFavorite} />
+                <ChangeLocationScreen />
 
             )
         } else {
@@ -66,6 +113,7 @@ const HomeScreen = () => {
             )
         }
     }
+
 
 
 
@@ -80,7 +128,7 @@ const HomeScreen = () => {
     };
 
     function DisplayCartScreen() {
-        if (!isCartClosed) {
+        if (isCartOpen) {
             return (
 
                 <NavigationContainer theme={navigationTheme} independent style={{ backgroundColor: 'red' }}>
@@ -100,7 +148,7 @@ const HomeScreen = () => {
     }
 
     function DisplayBlur() {
-        if (!isFavoritesClosed || !isCartClosed) {
+        if (isFavoritesOpen || isCartOpen) {
             return (
                 <BlurView blurAmount={10} blurRadius={5} style={{ zIndex: 5, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} />
             )
@@ -130,15 +178,14 @@ const HomeScreen = () => {
     };
 
     const animateFavorite = () => {
-        setFavoritesMenuStatus(!isFavoritesClosed)
-        animateLinearAmounts(isFavoritesClosed);
-        transitionToScreen(isFavoritesClosed, favoriteHeight, favoriteWidth);
+        setFavoritesMenuStatus(isFavoritesOpen => !isFavoritesOpen)
+
     };
 
+
+
     const animateCart = () => {
-        setCartMenuStatus(!isCartClosed)
-        animateLinearAmounts(isCartClosed);
-        transitionToScreen(isCartClosed, cartHeight, cartWidth);
+        setCartMenuStatus(isCartOpen => !isCartOpen)
     };
 
     const animateButtons = () => {
@@ -188,12 +235,14 @@ const HomeScreen = () => {
 
         <View style={styles.container}>
 
-            <LinearGradient style={styles.backgroundGradient} colors={['#ff1b6b', '#45caff']} />
+            {/* <LinearGradient style={styles.backgroundGradient} colors={['#ff1b6b', '#45caff']} /> */}
+
+            <Image source={BackgroundDark} style={{ height: window.height, width: window.width, bottom: -40 }} />
 
             {/* Header */}
 
             <View style={styles.headerContainer}>
-                <LinearGradient style={styles.backgroundGradient} colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0.7)']} />
+                <LinearGradient style={styles.backgroundGradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['#ff1b6b', '#45caff']} />
                 {/* <BlurView blurRadius={6} blurType='dark' style={styles.backgroundGradient} reducedTransparencyFallbackColor='white' /> */}
                 {/* <LinearGradient style={styles.backgroundGradient} colors={['rgba(255,255,255,0.3)', 'rgba(255,255,255,0.5)']} /> */}
                 <Text style={styles.headerText}>BarTab</Text>
@@ -210,7 +259,7 @@ const HomeScreen = () => {
                 <View >
                     {/* Recently Ordered */}
                     <View style={{ alignSelf: 'stretch' }}>
-                        <Text style={styles.sectionHeaderText}>Recently Ordered:</Text>
+                        <Text style={{ fontFamily: 'Poppins-Bold', color: 'white', textAlign: 'center', fontSize: 25 }}>Your Favorites</Text>
                         <ScrollView showsHorizontalScrollIndicator={false} horizontal style={{ paddingTop: 20 }}>
                             <StandardContainer isColoredBG={false} containerPadding={8} drinkName={'Strawberry Daiquiri'} imageSource={{ uri: 'https://oskars.ie/wp-content/uploads/frozen-strawberry-daiquiri.png' }} />
                             <StandardContainer isColoredBG={false} containerPadding={8} isColoredBG={false} drinkName={'Whiskey Rocks'} imageSource={{ uri: 'https://www.totalwine.com/dynamic/x490,sq/media/sys_master/twmmedia/hb1/h95/11941385535518.png' }} />
@@ -225,24 +274,27 @@ const HomeScreen = () => {
 
 
                     {/*Popular Today*/}
-                    <View style={{ alignSelf: 'stretch', marginTop: 20 }}>
-                        <Text style={[styles.sectionHeaderText, { paddingBottom: 20 }]}>Popular Today:</Text>
-                        <ScrollView showsHorizontalScrollIndicator={false} horizontal style={{ paddingTop: 20 }}>
-                            <HighlightContainer drinkName={'Blue Mother Fucker'} imageSource={{ uri: 'https://i.pinimg.com/originals/6f/98/70/6f98704adbbc06ba80e0278d0c7a36bc.png' }} />
-                            <HighlightContainer drinkName={'Sex On The Beach'} imageSource={{ uri: 'http://arrieta32.com/wp-content/uploads/2020/09/COCKTAILS-06.png' }} />
-                        </ScrollView>
+                    <View style={{ alignSelf: 'stretch', marginTop: 20, backgroundColor: 'white', height: 150, marginHorizontal: 30, borderRadius: 20 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={GoogleMapsImage} style={{ height: 140, width: 140 }} />
+                            <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 25, color: 'black', width: 100, textAlign: 'center', marginLeft: 20 }}>{'View Bars Nearby'}</Text>
+                        </View>
                     </View>
                     {/* End Popular Today */}
 
                     {/*Popular Today*/}
-                    <View style={{ alignSelf: 'stretch', marginTop: 20, paddingBottom: 200 }}>
-                        <Text style={[styles.sectionHeaderText, { paddingBottom: 20 }]}>Popular Today:</Text>
-                        <ScrollView showsHorizontalScrollIndicator={false} horizontal style={{ paddingTop: 20 }}>
-                            <HighlightContainer drinkName={'Blue Mother Fucker'} imageSource={{ uri: 'https://i.pinimg.com/originals/6f/98/70/6f98704adbbc06ba80e0278d0c7a36bc.png' }} />
-                            <HighlightContainer drinkName={'Sex On The Beach'} imageSource={{ uri: 'http://arrieta32.com/wp-content/uploads/2020/09/COCKTAILS-06.png' }} />
-                        </ScrollView>
+                    <View style={{ alignSelf: 'stretch', marginTop: 20, backgroundColor: 'white', height: 210, marginHorizontal: 30, borderRadius: 20 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                            {/* <View syle={{ flex: 1 }} /> */}
+                            <Image source={DrinksImage} style={{ height: 140, width: 100, resizeMode: 'cover', marginRight: 20 }} />
+                            <Image source={BurgerImage} style={{ height: 140, width: 100, resizeMode: 'cover' }} />
+                            {/* <View syle={{ flex: 1 }} /> */}
+                        </View>
+                        <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 25, color: 'rgba(127,192,241, 1)	', textAlign: 'center', marginTop: -10 }}>{'It\'s Happy Hour!'}</Text>
+                        <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 22, color: 'black', textAlign: 'center', marginTop: -10 }}>{'View our specials'}</Text>
                     </View>
                     {/* End Popular Today */}
+
 
 
                 </View>
@@ -266,8 +318,8 @@ const HomeScreen = () => {
             {/* Favorites Buttons */}
             {/* Favorite button that shows after movement is finished. */}
             <DisplayBlur />
-            <Animated.View style={{ opacity: isHidingTransitionButtons ? (isCartClosed ? 1 : 0) : 0, zIndex: 6, position: 'absolute', bottom: 25, right: linearMoveAmount, alignContent: 'center', justifyContent: 'center', width: favoriteWidth, height: favoriteHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
-                <TouchableOpacity disabled={!isFavoritesClosed} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} onPress={() => animateFavorite()}>
+            <Animated.View style={{ opacity: isHidingTransitionButtons ? (isCartOpen ? 0 : 1) : 0, zIndex: 6, position: 'absolute', bottom: 25, right: linearMoveAmount, alignContent: 'center', justifyContent: 'center', width: favoriteWidth, height: favoriteHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+                <TouchableOpacity disabled={isFavoritesOpen} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} onPress={() => animateFavorite()}>
                     <DisplayFavoritesScreen />
                 </TouchableOpacity>
             </Animated.View>
@@ -290,8 +342,8 @@ const HomeScreen = () => {
 
             {/* Cart Button */}
             {/* Cart Button that shows after movement is finished. */}
-            <Animated.View style={{ opacity: isHidingTransitionButtons ? (isFavoritesClosed ? 1 : 0) : 0, zIndex: 6, position: 'absolute', bottom: linearMoveAmount, right: 20, alignContent: 'center', justifyContent: 'center', width: cartWidth, height: cartHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
-                <TouchableOpacity disabled={!isCartClosed} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} onPress={() => animateCart()}>
+            <Animated.View style={{ opacity: isHidingTransitionButtons ? (isFavoritesOpen ? 0 : 1) : 0, zIndex: 6, position: 'absolute', bottom: linearMoveAmount, right: 20, alignContent: 'center', justifyContent: 'center', width: cartWidth, height: cartHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+                <TouchableOpacity disabled={isCartOpen} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} onPress={() => animateCart()}>
                     <DisplayCartScreen />
                 </TouchableOpacity>
             </Animated.View>
@@ -312,6 +364,9 @@ const HomeScreen = () => {
 
             {/* <ChangePaymentMethodScreen /> */}
 
+            {/* <ChangeLocationScreen /> */}
+
+
         </View >
     );
 
@@ -320,6 +375,7 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -329,11 +385,10 @@ const styles = StyleSheet.create({
     },
     sectionHeaderText:
     {
-        paddingLeft: 20,
-        textAlign: 'left',
+        textAlign: 'center',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 16
+        fontSize: 20
     },
     backgroundGradient: {
         bottom: 0,

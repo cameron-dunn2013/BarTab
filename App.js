@@ -15,7 +15,8 @@ import FavoritesScreen from './Screens/FavoritesScreen';
 
 const Stack = createStackNavigator();
 
-export default function App() {
+const App = () => {
+
   return (
     <NavigationContainer >
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
@@ -28,6 +29,7 @@ export default function App() {
 
 }
 
+export default App;
 
 
 const styles = StyleSheet.create({

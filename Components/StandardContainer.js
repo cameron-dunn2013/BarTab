@@ -6,14 +6,16 @@ const StandardContainer = (props) => {
     function IsHomeScreen() {
         if (!props.isColoredBG) {
             return (
-                <LinearGradient colors={['rgba(0,0,0,0.1)', 'rgba(0,0,0, 0.3)']} style={{
+                <View style={{
                     borderRadius: 15,
                     alignItems: 'center',
-                    paddingHorizontal: 8
+                    paddingHorizontal: 8,
+                    backgroundColor: 'white'
                 }}>
                     <Image source={props.imageSource} style={{ resizeMode: 'contain', height: 175, width: 150 }} />
-                    <Text style={styles.drinkNameStyle}>{props.drinkName}</Text>
-                </LinearGradient>)
+                    <TouchableOpacity style={{ backgroundColor }}>
+                    </TouchableOpacity>
+                </View>)
         } else {
             return (
                 <LinearGradient colors={['rgba(255,27,107,0.5)', 'rgba(69, 202, 255, 0.5)']} style={{

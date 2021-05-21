@@ -6,7 +6,7 @@ const HighlightContainer = (props) => {
     return (
         <View style={styles.constainer}>
             <TouchableOpacity>
-                <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.3)']} style={styles.containerBG}>
+                <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(255,255,255,0.5)']} style={styles.containerBG}>
                     <Image source={props.imageSource} style={{ resizeMode: 'contain', height: 175, width: 150 }} />
                     <Text style={styles.drinkNameStyle}>{props.drinkName}</Text>
                 </LinearGradient>

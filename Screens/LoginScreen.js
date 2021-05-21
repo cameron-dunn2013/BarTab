@@ -4,6 +4,7 @@ import DrinkVideo from '../Assets/DrinkMovie.mov'
 import Video from 'react-native-video'
 import LinearGradient from 'react-native-linear-gradient'
 import changeNavigationBarColor from 'react-native-navigation-bar-color'
+import { CommonActions } from '@react-navigation/native';
 
 
 
@@ -15,12 +16,25 @@ export default function LoginScreen({ navigation }) {
         console.log(e)// {success: false}
     }
 
+    function transitionToHome() {
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [
+                    {
+                        name: 'HomeScreen'
+                    },
+                ],
+            })
+        )
+    };
+
     return (
         <View style={styles.container} >
             <Video source={DrinkVideo} style={styles.backgroundVideo} resizeMode='cover' repeat={true} />
             <Text style={[styles.titleText, { position: 'absolute', top: 150 }]}>Welcome To BarTab!</Text>
             <TouchableOpacity onPress={() => {
-                navigation.navigate('HomeScreen')
+                transitionToHome();
             }}>
 
                 <LinearGradient colors={['#8B008B', '#8B2354']} style={styles.RoundedButton}>

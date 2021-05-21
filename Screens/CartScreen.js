@@ -4,7 +4,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import CartListingContainer from '../Components/CartListingContainer'
 import LinearGradient from 'react-native-linear-gradient'
 
-const CartScreen = ({ navigation, closeMenuFunction }) => {
+const CartScreen = ({ navigation, closeMenuFunction, cartNavigation, setIsInPaymentMethodStatus }) => {
+
+    function pushPaymentMethod() {
+        navigation.navigate('ChangePaymentMethodScreen');
+    }
     return (
         <View style={styles.container}>
             {/* Close Button */}
@@ -69,7 +73,7 @@ const CartScreen = ({ navigation, closeMenuFunction }) => {
                                     <Text>{'MARK ZUCKERBERG\nVisa •6789'}</Text>
 
                                 </View>
-                                <TouchableOpacity style={{ position: 'absolute', right: 8, marginTop: 15, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 30, shadowRadius: 4, shadowOpacity: 1, elevation: 8, backgroundColor: 'white', alignContent: 'center', justifyContent: 'center' }} onPress={(props) => { navigation.navigate('ChangePaymentMethodScreen') }}>
+                                <TouchableOpacity style={{ position: 'absolute', right: 8, marginTop: 15, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 30, shadowRadius: 4, shadowOpacity: 1, elevation: 8, backgroundColor: 'white', alignContent: 'center', justifyContent: 'center' }} onPress={() => pushPaymentMethod()}>
                                     <View>
                                         <Icon name='arrow-forward-ios' size={20} />
                                     </View>

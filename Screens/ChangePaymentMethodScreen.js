@@ -6,7 +6,7 @@ import PaymentIcon from 'react-native-ico-payment-method';
 
 
 
-const ChangePaymentMethodScreen = ({ navigation }) => {
+const ChangePaymentMethodScreen = ({ navigation, cartNavigation }) => {
 
     const screenHeight = Dimensions.get('window').height;
     const screenWidth = Dimensions.get('window').width;
@@ -95,9 +95,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         marginTop: 10,
         height: 160,
-        backgroundColor: 'white',
+        backgroundColor: 'rgba(0,0,0,0)',
         borderRadius: 20,
-        elevation: 5,
         marginBottom: 10,
         justifyContent: 'center',
         flexDirection: 'row',
