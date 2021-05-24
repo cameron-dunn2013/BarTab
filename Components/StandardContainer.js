@@ -13,8 +13,8 @@ const StandardContainer = (props) => {
                     backgroundColor: 'white'
                 }}>
                     <Image source={props.imageSource} style={{ resizeMode: 'contain', height: 175, width: 150 }} />
-                    <TouchableOpacity style={{ backgroundColor }}>
-                    </TouchableOpacity>
+                    {/* <TouchableOpacity style={{ backgroundColor }}>
+                    </TouchableOpacity> */}
                 </View>)
         } else {
             return (

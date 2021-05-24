@@ -103,8 +103,8 @@ const HomeScreen = () => {
     function DisplayFavoritesScreen() {
         if (isFavoritesOpen) {
             return (
-                // <FavoritesScreen style={{ zIndex: 10 }} closeMenuFunction={animateFavorite} />
-                <ChangeLocationScreen />
+                <FavoritesScreen style={{ zIndex: 10 }} closeMenuFunction={animateFavorite} />
+                // <ChangeLocationScreen />
 
             )
         } else {
@@ -137,6 +137,7 @@ const HomeScreen = () => {
                             {(props) => <CartScreen closeMenuFunction={animateCart} {...props} />}
                         </Stack.Screen>
                         <Stack.Screen name='ChangePaymentMethodScreen' component={ChangePaymentMethodScreen} />
+                        <Stack.Screen name='ChangeLocationScreen' component={ChangeLocationScreen} />
                     </Stack.Navigator>
                 </NavigationContainer>
             )
@@ -257,10 +258,10 @@ const HomeScreen = () => {
 
                 {/* Main Components */}
                 <View >
-                    {/* Recently Ordered */}
+                    {/* Your Favorites */}
                     <View style={{ alignSelf: 'stretch' }}>
                         <Text style={{ fontFamily: 'Poppins-Bold', color: 'white', textAlign: 'center', fontSize: 25 }}>Your Favorites</Text>
-                        <ScrollView showsHorizontalScrollIndicator={false} horizontal style={{ paddingTop: 20 }}>
+                        <ScrollView showsHorizontalScrollIndicator={false} horizontal style={{ paddingTop: 20, paddingLeft: 20 }}>
                             <StandardContainer isColoredBG={false} containerPadding={8} drinkName={'Strawberry Daiquiri'} imageSource={{ uri: 'https://oskars.ie/wp-content/uploads/frozen-strawberry-daiquiri.png' }} />
                             <StandardContainer isColoredBG={false} containerPadding={8} isColoredBG={false} drinkName={'Whiskey Rocks'} imageSource={{ uri: 'https://www.totalwine.com/dynamic/x490,sq/media/sys_master/twmmedia/hb1/h95/11941385535518.png' }} />
                             <StandardContainer isColoredBG={false} containerPadding={8} drinkName={'Gin and Tonic'} imageSource={{ uri: 'https://d32miag6ta013h.cloudfront.net/master_cocktails/2922/fr-fr/small/st~germain_g_t.png' }} />
@@ -311,20 +312,20 @@ const HomeScreen = () => {
 
 
             {/* Menu Button */}
-            <TouchableOpacity style={{ zIndex: 3, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }} onPress={() => animateButtons()}>
+            <TouchableOpacity style={{ elevation: 5, zIndex: 3, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: isMenuOpen ? 20 : 25, backgroundColor: 'rgba(255,255,255, 1)' }} onPress={() => animateButtons()}>
                 <Icon name={isMenuOpen ? "close" : "menu"} size={30} style={{ textAlign: 'center', opacity: 1 }} />
             </TouchableOpacity>
 
             {/* Favorites Buttons */}
             {/* Favorite button that shows after movement is finished. */}
             <DisplayBlur />
-            <Animated.View style={{ opacity: isHidingTransitionButtons ? (isCartOpen ? 0 : 1) : 0, zIndex: 6, position: 'absolute', bottom: 25, right: linearMoveAmount, alignContent: 'center', justifyContent: 'center', width: favoriteWidth, height: favoriteHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+            <Animated.View style={{ elevation: 5, opacity: isHidingTransitionButtons ? (isCartOpen ? 0 : 1) : 0, zIndex: 6, position: 'absolute', bottom: 25, right: linearMoveAmount, alignContent: 'center', justifyContent: 'center', width: favoriteWidth, height: favoriteHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
                 <TouchableOpacity disabled={isFavoritesOpen} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} onPress={() => animateFavorite()}>
                     <DisplayFavoritesScreen />
                 </TouchableOpacity>
             </Animated.View>
             {/* Favorite Button that is visible during transition */}
-            <Animated.View style={{ opacity: isHidingTransitionButtons ? 0 : 1, transform: [{ translateX: buttonsMoveAmount }], zIndex: 1, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+            <Animated.View style={{ elevation: 5, opacity: isHidingTransitionButtons ? 0 : 1, transform: [{ translateX: buttonsMoveAmount }], zIndex: 1, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
                 <TouchableOpacity style={{ zIndex: 2, position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} >
                     <Icon name={"favorite"} size={30} style={{ zIndex: 2, position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
                 </TouchableOpacity>
@@ -333,7 +334,7 @@ const HomeScreen = () => {
 
 
             {/* Settings Button */}
-            <Animated.View style={[{ transform: buttonsDiagonalMoveAmount.getTranslateTransform(), position: 'absolute', bottom: 25, right: 20, zIndex: 2, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }]}>
+            <Animated.View style={[{ elevation: 5, transform: buttonsDiagonalMoveAmount.getTranslateTransform(), position: 'absolute', bottom: 25, right: 20, zIndex: 2, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }]}>
                 <TouchableOpacity style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }}>
                     <Icon name={"settings"} size={30} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} />
                 </TouchableOpacity>
@@ -342,14 +343,14 @@ const HomeScreen = () => {
 
             {/* Cart Button */}
             {/* Cart Button that shows after movement is finished. */}
-            <Animated.View style={{ opacity: isHidingTransitionButtons ? (isFavoritesOpen ? 0 : 1) : 0, zIndex: 6, position: 'absolute', bottom: linearMoveAmount, right: 20, alignContent: 'center', justifyContent: 'center', width: cartWidth, height: cartHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+            <Animated.View style={{ elevation: 5, opacity: isHidingTransitionButtons ? (isFavoritesOpen ? 0 : 1) : 0, zIndex: 6, position: 'absolute', bottom: linearMoveAmount, right: 20, alignContent: 'center', justifyContent: 'center', width: cartWidth, height: cartHeight, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
                 <TouchableOpacity disabled={isCartOpen} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }} onPress={() => animateCart()}>
                     <DisplayCartScreen />
                 </TouchableOpacity>
             </Animated.View>
 
             {/* Cart button that is visible during transition */}
-            <Animated.View style={{ opacity: isHidingTransitionButtons ? 0 : 1, transform: [{ translateY: buttonsMoveAmount }], zIndex: 1, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
+            <Animated.View style={{ elevation: 5, opacity: isHidingTransitionButtons ? 0 : 1, transform: [{ translateY: buttonsMoveAmount }], zIndex: 1, position: 'absolute', bottom: 25, right: 20, alignContent: 'center', justifyContent: 'center', width: 50, height: 35, borderRadius: 25, backgroundColor: 'rgba(255,255,255, 1)' }}>
                 <TouchableOpacity style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0, textAlign: 'center', opacity: 1 }}>
                     <DisplayCartScreen />
                 </TouchableOpacity>
